@@ -1,0 +1,40 @@
+---
+  - name: Get Facts
+    hosts: all
+    roles:
+      - juniper.junos
+    connection: local
+    gather_facts: no
+
+    vars_prompt:
+      - name: ADM_USER
+        prompt: Username
+        private: no
+      - name: ADM_PASSWORD
+        prompt: password
+        private: yes
+
+    tasks:
+
+      - name: Retrieve facts from device
+        junos_get_facts:
+          host: "{{ ansible_host }}"
+          user: "{{ ADM_USER }}"
+          passwd: "{{ ADM_PASSWORD }}"
+        register: junos
+
+      - name: Print facts
+        debug:
+          var: junos
+
+      - name: Print version
+        debug:
+          var: junos.facts.version
+
+      - name: Configure login banner
+        junos_install_config:
+          host: "{{ ansible_host }}"
+          user: "{{ ADM_USER }}"
+          passwd: "{{ ADM_PASSWORD }}"
+          file: banner.set
+          comment: "login banner v1.35"
