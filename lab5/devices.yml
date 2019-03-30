@@ -1,0 +1,6 @@
+---
+device_ip: 100.123.12.0
+device_user: jcluser
+device_password: Juniper!1
+
+queue_name: testq
