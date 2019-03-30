@@ -1,0 +1,11 @@
+---
+
+test_interface_status:
+  - command: show interfaces terse
+  - iterate:
+      xpath: //physical-interface
+      id: name
+      tests:
+        - is-equal: oper-status, up
+          err: "Interface <{{post['name']}}> is <{{post['oper-status']}}> instead of up as expected!"
+

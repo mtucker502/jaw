@@ -1,0 +1,9 @@
+---
+
+test_interface_status:
+  - rpc: get-interface-information
+  - iterate:
+      xpath: //physical-interface
+      tests:
+        - is-equal: oper-status, up
+          err: "Interface <{{post['name']}}> is <{{post['oper-status']}}> instead of up as expected!"

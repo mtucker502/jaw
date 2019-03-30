@@ -1,0 +1,9 @@
+---
+
+test_re_cpu_usage:
+  - rpc: get-route-engine-information
+  - item:
+      xpath: //route-engine-information/route-engine
+      tests:
+        - is-gt: cpu-idle, 20
+

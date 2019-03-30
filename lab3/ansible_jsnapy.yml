@@ -1,0 +1,32 @@
+---
+  - name: Run precheck
+    hosts: all
+    roles:
+      - juniper.junos
+    connection: local
+    gather_facts: no
+
+    vars_prompt:
+      - name: ADM_USER
+        prompt: Username
+        private: no
+      - name: ADM_PASSWORD
+        prompt: password
+        private: yes
+
+    tasks:
+      - name: Run snapcheck
+        juniper_junos_jsnapy:
+          user: "{{ ADM_USER }}"
+          passwd: "{{ ADM_PASSWORD }}"
+          host: "{{ ansible_host }}"
+          port: 22
+          action: snapcheck
+          test_files: test_interface_status.yml
+        register: jsnapy_result
+
+      - name: Verify Snapcheck
+        assert:
+          that:
+            - "jsnapy_result.passPercentage == 100"
+          msg: "JSNAPy test on {{ inventory_hostname }} failed"
